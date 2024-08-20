@@ -112,21 +112,36 @@ int main(int argc, char* argv[])
     */
     if(argc<2)
     {
-        cout << "parser <filename>" << endl;
+        cout << endl << "<<< JSON parser + sort + find differences >>>" << endl << endl;
+        cout << "USING: parser <filename>" << endl << endl;
+        cout << "COMMANDs:..." << endl;
+        cout << "  prints | ps       - print result sort" << endl;
+        cout << "  printg | pg <grp> - print group payload data lenght" << endl;
+        cout << "analitic | al <grp> - analysis differences in group" << endl;
+        cout << "   clear | cls      - clear console" << endl;
+        cout << "    quit | q        - exit programm" << endl << endl;
+
         exit(0);
     }
 
-    //string path = "log.json";
     string path = argv[1];
-
-
 
     /*
     *   открываем файл
     */
     ifstream fin;
     fin.open(path);
-
+    
+    if(fin.is_open())
+    {
+        cout << "file " << path << " is open" << endl;
+    }
+    else
+        {
+            cout << "file " << path << " not exist" << endl;
+            exit(-1);
+        }
+    
     vector<string> json_str;
     vector<string> payload_str;
     vector<vector<unsigned char>> payload_hex;
@@ -227,7 +242,7 @@ int main(int argc, char* argv[])
         unsigned int key = (unsigned int)atoi(arg2.c_str());
 
         //печать группы пакетов...    
-        if(!memcmp(arg1.c_str(),"prints",6)||!memcmp(arg1.c_str(),"ps",2))
+        if(!memcmp(arg1.c_str(),"printg",6)||!memcmp(arg1.c_str(),"pg",2))
         {
             if(key>0)
             {
@@ -252,11 +267,19 @@ int main(int argc, char* argv[])
         }
 
         //печать списка сортировки...
-        if(cmd=="print"||cmd=="p")
+        if(cmd=="prints"||cmd=="ps")
         {
             print_sort(payload_sort);
             continue;
         }
+
+        //очистка консоли...
+        if(cmd=="clear"||cmd=="cls")
+        {
+            system("cls");
+            continue;
+        }
+
 
         //выход...
         if(cmd=="quit"||cmd=="q")

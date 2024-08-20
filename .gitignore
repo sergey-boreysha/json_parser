@@ -1,2 +1,4 @@
 .vscode/
 build/
+~old_json/
+*.json
