@@ -281,6 +281,12 @@ int main(int argc, char* argv[])
         }
 
 
+        //пустая комманда...
+        if(cmd=="")
+        {
+            continue;
+        }
+
         //выход...
         if(cmd=="quit"||cmd=="q")
         {
