@@ -10,6 +10,7 @@
 using namespace std;
 //using namespace ofstream;
 
+//конвертор hex байта string в unsigned char...
 unsigned char hstob(char data)
 {
     if(data>=48 && data<=57)
@@ -22,6 +23,7 @@ unsigned char hstob(char data)
     return 0;
 }
 
+//распечатка сортировки...
 void print_sort(map<unsigned int, vector<vector<unsigned char>>> & data)
 {
     for(pair plspair : data)
@@ -30,8 +32,23 @@ void print_sort(map<unsigned int, vector<vector<unsigned char>>> & data)
     }
 }
 
+//печать заголовка, нумерация байт...
+void print_head(unsigned char key)
+{
+    for(int i=0;i<=key;i++)
+        cout << setw(2) << std::setfill('0') << i << " ";
+    cout << endl;
+
+    for(int i=0;i<=((key+1)*2)+key;i++)
+        cout << "-";
+    cout << endl;
+}
+
+//печать отсортированной группы по ключу...
 void print_group(map<unsigned int, vector<vector<unsigned char>>> & data, unsigned char key)
 {
+    print_head(key);
+
     vector<vector<unsigned char>> & outer_vec = data[key];
 
     // Вывод элементов векторов  
@@ -50,9 +67,10 @@ void analitic(map<unsigned int, vector<vector<unsigned char>>> & data, unsigned 
 
     vector<vector<unsigned char>> & outer_vec = data[key];
 
-    vector<unsigned int> differences;
+    //vector<unsigned int> differences;
+    map<unsigned int,unsigned int> differences;
 
-    //...
+    //ищем несовпадения...
     for(unsigned int i=0;i<key;i++)
     {
         unsigned char temp = data[key][0][i];
@@ -60,32 +78,52 @@ void analitic(map<unsigned int, vector<vector<unsigned char>>> & data, unsigned 
         for(vector<unsigned char> & inner_vec : outer_vec) 
         {  
             if(temp!=inner_vec[i])
-                differences.push_back(i);
+            {
+                if(!differences.count(temp))
+                {
+                    differences.insert(make_pair(i,i));
+                }
+            }
         }
     }
 
-    if(differences.size())
-    {
-        cout << "found " << differences.size() << " differences" << endl;
-        cout << "are different ";
-
-        for(unsigned tmp : differences)
+        if(differences.size())
         {
-            cout << dec << tmp << " ";
-        }
+            cout << "found " << differences.size() << " differences" << endl;
+            cout << "are different ";
 
-        cout << "bytes" << endl;
-    }
-    else
-        {
-            cout << ">>>> payload equial!" << endl;
+            for(pair tmp : differences)
+            {
+                cout << dec << tmp.first << " ";
+            }
+
+            cout << "bytes" << endl;
         }
+        else
+            {
+                cout << ">>>> payload equial!" << endl;
+            }
 }
 
-int main()
+int main(int argc, char* argv[])
 {
-    //открываем файл
-    string path = "log.json";
+    /*
+    *   обработка аргументов
+    */
+    if(argc<2)
+    {
+        cout << "parser <filename>" << endl;
+        exit(0);
+    }
+
+    //string path = "log.json";
+    string path = argv[1];
+
+
+
+    /*
+    *   открываем файл
+    */
     ifstream fin;
     fin.open(path);
 
@@ -93,7 +131,9 @@ int main()
     vector<string> payload_str;
     vector<vector<unsigned char>> payload_hex;
 
-    //вычитываем строки из файла в вектор 
+    /*
+    *   вычитываем строки из файла в вектор
+    */ 
     while(!fin.eof())
     {
         string strtmp = "";
@@ -105,7 +145,9 @@ int main()
 
     int index = 0;
 
-    //чистим строки
+    /*
+    *   чистим строки
+    */
     for(string strtmp : json_str)
     {
         if(strtmp.find("udp.payload")!=string::npos)
@@ -123,7 +165,9 @@ int main()
 
     cout << "find " << index << " string..." << endl;
 
-    //конвертирование hex строки в число...
+    /*
+    *   конвертирование hex строки в число...
+    */
     index = 0;
     for(string strtmp : payload_str)
     {
@@ -141,7 +185,9 @@ int main()
 
     cout << "convert " << index << " string..." << endl;
 
-    //сортировка...
+    /*
+    *   сортировка...
+    */
     map<unsigned int, vector<vector<unsigned char>>> payload_sort;
 
     for(vector<unsigned char> uchtmp : payload_hex)
@@ -168,7 +214,6 @@ int main()
     /*
     *   командный блок...
     */
-
     string cmd;
     string arg1(10,'\0');
     string arg2(10,'\0');
@@ -223,7 +268,9 @@ int main()
 
     }
 
-    //закрываем файл
+    /*
+    *   закрываем файл...
+    */
     fin.close();
 }
 
