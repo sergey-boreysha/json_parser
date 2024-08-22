@@ -105,22 +105,32 @@ void analitic(map<unsigned int, vector<vector<unsigned char>>> & data, unsigned 
             }
 }
 
+void print_help()
+{
+    cout << endl << "<<< JSON parser + sort + find differences >>>" << endl << endl;
+    cout << "USING: parser <filename>" << endl << endl;
+    cout << "COMMANDs:..." << endl;
+    cout << "  prints | ps       - print result sort" << endl;
+    cout << "  printg | pg <grp> - print group payload data lenght" << endl;
+    cout << "analitic | al <grp> - analysis differences in group" << endl;
+    cout << "   clear | cls      - clear console" << endl;
+    cout << "    quit | q        - exit programm" << endl << endl;
+}
+
 int main(int argc, char* argv[])
 {
     /*
     *   обработка аргументов
     */
+    if(!memcmp(argv[1],"--help",6))
+    {
+        print_help();
+        exit(0);
+    }
+
     if(argc<2)
     {
-        cout << endl << "<<< JSON parser + sort + find differences >>>" << endl << endl;
-        cout << "USING: parser <filename>" << endl << endl;
-        cout << "COMMANDs:..." << endl;
-        cout << "  prints | ps       - print result sort" << endl;
-        cout << "  printg | pg <grp> - print group payload data lenght" << endl;
-        cout << "analitic | al <grp> - analysis differences in group" << endl;
-        cout << "   clear | cls      - clear console" << endl;
-        cout << "    quit | q        - exit programm" << endl << endl;
-
+        print_help();
         exit(0);
     }
 
