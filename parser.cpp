@@ -1,70 +1,35 @@
 #include <iostream>
 #include <fstream>
+#include <vector>
+
+/* 
 #include <string>
 #include <cstring>
-#include <vector>
+
 #include <map>
 #include <iomanip>
-#include <sstream>
+#include <sstream> */
 
 using namespace std;
 
+#include "argument.hpp"
+#include "reader.hpp"
 
-void print_help()
-{
-    cout << endl << "<<< JSON parser + sort + find differences >>>" << endl << endl;
-    cout << "USING: parser <filename>" << endl << endl;
-    cout << "COMMANDs:..." << endl;
-    cout << "  prints | ps       - print result sort" << endl;
-    cout << "  printg | pg <grp> - print group payload data lenght" << endl;
-    cout << "analitic | al <grp> - analysis differences in group" << endl;
-    cout << "   clear | cls      - clear console" << endl;
-    cout << "    quit | q        - exit programm" << endl << endl;
-}
 
 int main(int argc, char* argv[])
 {
     /*
     *   обработка аргументов
     */
-    if(!memcmp(argv[1],"--help",6))
-    {
-        print_help();
-        exit(0);
-    }
-
-    if(argc<2)
-    {
-        print_help();
-        exit(0);
-    }
-
-    string path = argv[1];
-
-
-
-    /*
-    *   командный блок...
-    */
-    /* string cmd;
-    string arg1(10,'\0');
-    string arg2(10,'\0'); */
-    
-    while(1)
-    {
-
-    }
-
-    /*
-    *   закрываем файл...
-    */
-    //fin.close();
-}
+    __argumentHandler(argc, argv);
 
     /*
     *   открываем файл
     */
-    /* ifstream fin;
+
+    string path = argv[1];
+
+    ifstream fin;
     fin.open(path);
     
     if(fin.is_open())
@@ -76,10 +41,100 @@ int main(int argc, char* argv[])
             cout << "file " << path << " not exist" << endl;
             exit(-1);
         }
+
+    /*
+    *   вычитываем строки из файла в вектор
+    */ 
+    vector<string> string_from_file;
+    readfile(fin,string_from_file);
+    cout << "lines readed " << string_from_file.size() << "..."<< endl;
+
+    /*
+    *   ищем пакеты json
+    */ 
     
-    vector<string> json_str;
-    vector<string> payload_str;
-    vector<vector<unsigned char>> payload_hex; */
+    unsigned int opening_curly_braces = 0;
+    unsigned int closing_curly_braces = 0;
+    unsigned int founded_json_package = 0;
+
+    vector<string> json_package;
+    vector<vector<string>> json_packages;
+
+    for(string strtmp : string_from_file)
+    {
+        for(char c_tmp : strtmp)
+        {
+            if(c_tmp == '{')
+            {
+                opening_curly_braces++;
+            }
+
+                if(c_tmp == '}')
+                {
+                    closing_curly_braces++;
+                }
+
+        }
+            if(opening_curly_braces)
+            {
+                json_package.push_back(strtmp);
+
+                if(opening_curly_braces==closing_curly_braces)
+                {
+                    opening_curly_braces = 0;
+                    closing_curly_braces = 0;
+                    founded_json_package++;
+
+                    json_packages.push_back(json_package);
+                    json_package.clear();
+                }
+            }
+    }
+
+    cout << "founded " << founded_json_package << " json package..."<< endl;
+    cout << "founded " << json_packages.size() << " json package..."<< endl;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    
+    //int index = 0;
+    
+    //vector<string> payload_str;
+    //vector<vector<unsigned char>> payload_hex;
+
+    /*
+    *   командный блок...
+    */
+    /* string cmd;
+    string arg1(10,'\0');
+    string arg2(10,'\0'); */
+    
+    /* while(1)
+    {
+
+    } */
+
+    /*
+    *   закрываем файл...
+    */
+    fin.close();
+}
+
+    
+
 //конвертор hex байта string в unsigned char...
 /* unsigned char hstob(char data)
 {
@@ -234,19 +289,7 @@ int main(int argc, char* argv[])
         }
 
         cout << ">>>> illegal cmd!" << endl; */
-    /*
-    *   вычитываем строки из файла в вектор
-    */ 
-    /* while(!fin.eof())
-    {
-        string strtmp = "";
-        getline(fin,strtmp);
-        json_str.push_back(strtmp);
-    }
-
-    cout << "lines readed " << json_str.size() << "..."<< endl;
-
-    int index = 0; */
+    
 
     /*
     *   чистим строки
