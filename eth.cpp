@@ -17,6 +17,17 @@ using namespace std;
 #include "parcer.hpp"
 #include "analitic.hpp"
 
+/* string get_value(vector<string> json_package,string search_value)
+{
+    for(string strtmp : json_package)
+    {
+        if(strtmp.find(search_value)!=string::npos)
+        {
+
+        }
+    }
+} */
+
 int main(int argc, char* argv[])
 {
     /*
@@ -59,10 +70,34 @@ int main(int argc, char* argv[])
     cout << "founded " << founded_json_package << " json package..."<< endl;
     cout << "founded " << json_packages.size() << " json package..."<< endl;
 
+    /*
+    *   сортировка по отправителю
+    */
+    string temp = "          \"ip.checksum\": \"0xc9d0\",";
+    //string temp = "          \"ip.dst_host\": \"172.16.203.101\",";
 
+    size_t ret = temp.find(":"); 
 
+    string substring;
 
+    if(ret!=string::npos)
+    {
+        substring = temp.substr(ret+3, temp.size()-ret-5); 
+    }
+    cout << substring << endl;
+    while(1);
 
+    /*
+    *   сортировка по получателю
+    */
+
+    /*
+    *   сортировка по длинне пакета
+    */
+
+    /*
+    *   анализ отличий
+    */
 
 
 
