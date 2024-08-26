@@ -33,19 +33,19 @@ void print_sort(map<unsigned int, vector<vector<unsigned char>>> & data)
 }
 
 //печать заголовка, нумерация байт...
-void print_head(unsigned char key)
+void print_head(unsigned int key)
 {
-    for(int i=0;i<=key;i++)
+    for(unsigned int i=0;i<=key;i++)
         cout << setw(2) << std::setfill('0') << i << " ";
     cout << endl;
 
-    for(int i=0;i<=((key+1)*2)+key;i++)
+    for(unsigned int i=0;i<=((key+1)*2)+key;i++)
         cout << "-";
     cout << endl;
 }
 
 //печать отсортированной группы по ключу...
-void print_group(map<unsigned int, vector<vector<unsigned char>>> & data, unsigned char key)
+void print_group(map<unsigned int, vector<vector<unsigned char>>> & data, unsigned int key)
 {
     print_head(key);
 
@@ -107,7 +107,7 @@ void analitic(map<unsigned int, vector<vector<unsigned char>>> & data, unsigned 
 
 void print_help()
 {
-    cout << endl << "<<< JSON parser + sort + find differences >>>" << endl << endl;
+    cout << endl << "<<< JSON parser + sort + find differences v0.1.1>>>" << endl << endl;
     cout << "USING: parser <filename>" << endl << endl;
     cout << "COMMANDs:..." << endl;
     cout << "  prints | ps       - print result sort" << endl;
@@ -122,17 +122,18 @@ int main(int argc, char* argv[])
     /*
     *   обработка аргументов
     */
+    if(argc<2)
+    {
+        print_help();
+        exit(0);
+    }
+    
     if(!memcmp(argv[1],"--help",6))
     {
         print_help();
         exit(0);
     }
 
-    if(argc<2)
-    {
-        print_help();
-        exit(0);
-    }
 
     string path = argv[1];
 
@@ -258,7 +259,7 @@ int main(int argc, char* argv[])
             {
                 if(payload_sort.count(key))
                 {
-                    print_group(payload_sort,(unsigned char)key);
+                    print_group(payload_sort,key);
                     continue;
                 }
                 else
