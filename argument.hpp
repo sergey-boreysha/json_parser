@@ -1,4 +1,6 @@
 #pragma once
 
-void __argumentHandler(int argc, char* argv[]);
+#define DEBUG_MODE_ARGUMENT YES
+
+void __argument_Handler(int argc, char* argv[]);
 

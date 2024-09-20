@@ -1,12 +1,15 @@
 #include <iostream>
+#include <sstream>  
+#include <string>  
 #include <fstream>
 #include <vector>
+#include <map>
+
 
 /* 
 #include <string>
 #include <cstring>
 
-#include <map>
 #include <iomanip>
 #include <sstream> */
 
@@ -17,23 +20,13 @@ using namespace std;
 #include "parcer.hpp"
 #include "analitic.hpp"
 
-/* string get_value(vector<string> json_package,string search_value)
-{
-    for(string strtmp : json_package)
-    {
-        if(strtmp.find(search_value)!=string::npos)
-        {
-
-        }
-    }
-} */
 
 int main(int argc, char* argv[])
 {
     /*
     *   обработка аргументов
     */
-    __argumentHandler(argc, argv);
+    __argument_Handler(argc, argv);
 
     /*
     *   открываем файл
@@ -57,7 +50,7 @@ int main(int argc, char* argv[])
     *   вычитываем строки из файла в вектор
     */ 
     vector<string> string_from_file;
-    readfile(fin,string_from_file);
+    read_string_from_file(fin,string_from_file); //----------------------нужно ли вернуть чего??????
 
     cout << "lines readed " << string_from_file.size() << "..."<< endl;
 
@@ -73,19 +66,8 @@ int main(int argc, char* argv[])
     /*
     *   сортировка по отправителю
     */
-    string temp = "          \"ip.checksum\": \"0xc9d0\",";
-    //string temp = "          \"ip.dst_host\": \"172.16.203.101\",";
 
-    size_t ret = temp.find(":"); 
-
-    string substring;
-
-    if(ret!=string::npos)
-    {
-        substring = temp.substr(ret+3, temp.size()-ret-5); 
-    }
-    cout << substring << endl;
-    while(1);
+    map<string,map<string,vector<vector<string>>>> json_sorted;
 
     /*
     *   сортировка по получателю
@@ -104,37 +86,55 @@ int main(int argc, char* argv[])
 
 
 
-
-
-
-    
-    
-    
-    //int index = 0;
-    
     /*
     *   командный блок...
     */
-    /* string cmd;
-    string arg1(10,'\0');
-    string arg2(10,'\0'); */
-    
-    /* while(1)
+    while(1)
     {
+        //ввод строки с клавиатуры  
+		std::string input;  
+		std::cout << ">>> ";  
+		std::getline(std::cin, input);  
 
-    } */
+		//создаем поток для разбора строки  
+		std::istringstream stream(input);  
+		std::string word;  
+		std::vector<std::string> words;  
+
+		//парсим строку и сохраняем слова в вектор  
+		while (stream >> word)
+		{  
+			words.push_back(word);  
+		}  
+
+		//проверяем был ли ввод
+		if(words.size()==0)
+		{
+			continue;
+		}
+
+        if(words[0]=="exit" && words.size()==1) exit(0);
+
+        if(words[0]=="getval" && words.size()==2) //отладочная версия!!!
+        {
+            string ret_value;
+            unsigned int json_number = 1;
+
+            for(string temp : json_packages[0]) //временно один json
+            {
+                unsigned int ret = json_get_value_by_field(temp, words[1], ret_value);
+
+                if(ret)
+                {
+                    cout << "json #" << json_number << " -> \"" << words[1] << "\"" <<" = " <<  "\"" << ret_value << "\"" << endl;
+                }
+            }
+        } 
+
+    }
 
     /*
     *   закрываем файл...
     */
     fin.close();
 }
-
-    
-
-
-
-        
-    
-
-    

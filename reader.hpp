@@ -1,3 +1,3 @@
 #pragma once
 
-void readfile(ifstream& fin,vector<string> & string_from_file);
+void read_string_from_file(ifstream& fin,vector<string> & string_from_file);

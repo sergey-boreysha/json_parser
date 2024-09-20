@@ -1,11 +1,12 @@
 
-#define DEBUG_MODE
+
 
 #include <iostream>
 #include <cstring>
 
 using namespace std;
 
+#include "castom-data-type.hpp"
 #include "argument.hpp"
 
 void print_help()
@@ -20,13 +21,13 @@ void print_help()
     cout << "    quit | q        - exit programm" << endl << endl;
 }
 
-void __argumentHandler(int argc, char* argv[])
+void __argument_Handler(int argc, char* argv[])
 {
-    #ifdef DEBUG_MODE
+    #if DEBUG_MODE_ARGUMENT == YES
+        cout<<">>>>> WARNING!!! - ENABLE DEBUG MODE! <<<<<<"<<endl;
         argc = 3;
         char*path = new char[20];
         memset(path,0,20);
-        //memcpy(path,"..\\..\\idle.json",15);
         memcpy(path,"idle.json",9);
         argv[1] = path;
     #endif
